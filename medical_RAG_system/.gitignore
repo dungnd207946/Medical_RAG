@@ -159,8 +159,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
-data/
-
 information_retrieval/faiss_container/faiss_indices
 
 information_retrieval/faiss_container/PMIDs
+pass.env
