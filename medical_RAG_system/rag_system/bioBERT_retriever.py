@@ -10,13 +10,7 @@ class BioBERTRetriever:
     def __init__(self):
         self.elastic_password = "7n2xK2kELC0GYsOCyi9+"
         ca_certs = r"C:\Users\Dung\Downloads\elasticsearch-9.2.0-windows-x86_64\elasticsearch-9.2.0\config\certs\http_ca.crt"
-        self.es = Elasticsearch(
-            ['https://localhost:9200'],
-            basic_auth=('elastic', self.elastic_password),
-            verify_certs=True,
-            ca_certs=ca_certs,
-            request_timeout=60
-        )
+        self.es = Elasticsearch(["http://localhost:9200"], request_timeout=60)
         self.index = "injury_prevent_index"
         self.faiss_url = "http://localhost:5000/search"
         self.query_encoder = bioBERTEncoder()

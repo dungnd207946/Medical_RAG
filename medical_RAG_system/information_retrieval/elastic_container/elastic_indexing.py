@@ -8,15 +8,9 @@ from elasticsearch import Elasticsearch, helpers
 
 class ElasticIndexing:
     def __init__(self, index_name):
-        self.password = "7n2xK2kELC0GYsOCyi9+" # Mật khẩu elasticsearch trong máy bạn
-        ca_certs = r"C:\Users\Dung\Downloads\elasticsearch-9.2.0-windows-x86_64\elasticsearch-9.2.0\config\certs\http_ca.crt"
-        self.es = Elasticsearch(
-            ['https://localhost:9200'],
-            basic_auth=('elastic', self.password),
-            verify_certs=True,
-            ca_certs=ca_certs,
-            request_timeout=60
-        )
+        #self.password = "7n2xK2kELC0GYsOCyi9+" # Mật khẩu elasticsearch trong máy bạn
+        #ca_certs = r"C:\Users\Dung\Downloads\elasticsearch-9.2.0-windows-x86_64\elasticsearch-9.2.0\config\certs\http_ca.crt"
+        self.es = Elasticsearch(["http://localhost:9200"], request_timeout=60)
         self.index_name = index_name
         self.source_directory = Path('../../data/embed_data/source')
         self.error_log_path = Path('../../data/embed_data/errors.jsonl')
