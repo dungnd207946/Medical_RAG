@@ -5,14 +5,17 @@ import json
 from medical_RAG_system.information_retrieval.document_encoding.bioBERT_encoder import bioBERTEncoder
 from medical_RAG_system.information_retrieval.faiss_container.faiss_insert_data import FaissData
 from dotenv import dotenv_values
+import os
+ELASTIC_URL = os.getenv("ELASTIC_URL", "http://localhost:9200")
+FAISS_URL   = os.getenv("FAISS_URL",   "http://localhost:5000/search")
 
 class BioBERTRetriever:
     def __init__(self):
-        self.elastic_password = "7n2xK2kELC0GYsOCyi9+"
-        ca_certs = r"C:\Users\Dung\Downloads\elasticsearch-9.2.0-windows-x86_64\elasticsearch-9.2.0\config\certs\http_ca.crt"
-        self.es = Elasticsearch(["http://localhost:9200"], request_timeout=60)
+        # self.elastic_password = "7n2xK2kELC0GYsOCyi9+"
+        # ca_certs = r"C:\Users\Dung\Downloads\elasticsearch-9.2.0-windows-x86_64\elasticsearch-9.2.0\config\certs\http_ca.crt"
+        self.es = Elasticsearch([ELASTIC_URL], request_timeout=60)
         self.index = "injury_prevent_index"
-        self.faiss_url = "http://localhost:5000/search"
+        self.faiss_url = FAISS_URL
         self.query_encoder = bioBERTEncoder()
 
     def query_to_vector(self, text: str):

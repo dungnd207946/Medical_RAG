@@ -6,14 +6,18 @@ from pathlib import Path
 from tqdm import tqdm
 from elasticsearch import Elasticsearch, helpers
 
+elastic_url = os.getenv("ELASTIC_URL", "http://localhost:9200")
+print("Using Elasticsearch:", elastic_url)   # thêm dòng này để debug
+
 class ElasticIndexing:
     def __init__(self, index_name):
         #self.password = "7n2xK2kELC0GYsOCyi9+" # Mật khẩu elasticsearch trong máy bạn
         #ca_certs = r"C:\Users\Dung\Downloads\elasticsearch-9.2.0-windows-x86_64\elasticsearch-9.2.0\config\certs\http_ca.crt"
-        self.es = Elasticsearch(["http://localhost:9200"], request_timeout=60)
+        
+        self.es = Elasticsearch([elastic_url], request_timeout=60)
         self.index_name = index_name
-        self.source_directory = Path('../../data/embed_data/source')
-        self.error_log_path = Path('../../data/embed_data/errors.jsonl')
+        self.source_directory = Path(os.getenv("SOURCE_DIR", "/app/data/embed_data/source"))
+        self.error_log_path = Path(os.getenv("ERROR_LOG_PATH", "/app/data/embed_data/errors.jsonl"))
 
     def create_index(self):
         if not self.es.indices.exists(index=self.index_name):
