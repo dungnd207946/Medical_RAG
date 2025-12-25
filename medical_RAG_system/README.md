@@ -14,6 +14,7 @@ This repository contains a comprehensive implementation of a Medical Retrieval-A
   - [Evaluation](#evaluation)
   - [Data Storage](#data-storage)
 - [Contributing](#contributing)
+- [Citation](#citaion)
 - [License](#license)
 
 ## Overview
@@ -24,55 +25,74 @@ The Medical RAG System is designed to enhance medical information retrieval and 
 ## File structure
 
 ```plaintext
-├── evaluation
-│   ├── evaluation_data_storages
-│   │   ├── documentation.md
-│   │   ├── elasticsearch
-│   │   │   ├── elastic.ipynb
-│   │   │   └── eval_elastic.ipynb
-│   │   ├── faiss
-│   │   │   ├── conncatinatior.py
-│   │   │   ├── embedding_extractor.py
-│   │   │   └── request.ipynb
-│   │   └── mongodb
-│   │       ├── eval_mongo.ipynb
-│   │       └── mongoDB.ipynb
-│   └── evaluation_QA_system
-│       ├── dataset_filter
-│       │   └── filter_data.ipynb
-│       ├── evaluation_pipeline.ipynb
-│       ├── explore_questions.ipynb
-│       ├── full_text_evaluation.py
-│       └── RAG_evaluator.py
-├── information_retrieval
-│   ├── document_encoding
-│   │   ├── bioBERT_encoder.py -> mô hình để embed dữ liệu từ folder source, ghi vào folder target
-│   │   ├── encode_documents.ipynb -> Test
-│   │   ├── chunking_documents.ipynb -> Test
-│   │   └── text_chunking.py -> Chia dữ liệu pdf thành các chunk có cấu trúc jsonl, lưu vào folder source
-│   ├── elastic_container
-│   │   ├── elastic.ipynb
-│   │   ├── ingest_data.py
-│   │   └── start_elasticsearch.sh
-│   └── faiss_container
-│       ├── docker-compose.yml
-│       ├── Dockerfile
-│       ├── faiss_insert_data.ipynb
-│       └── server.py
-├── rag_system
-│   ├── bioBERT_encoder.py
-│   ├── bioBERT_retriever.py
-│   ├── bm25_retriever.py
-│   ├── hybrid_retriever.py
-│   ├── medCPT_encoder.py
-│   ├── medCPT_retriever.py
-│   ├── med_rag.py
-│   ├── openAI_chat.py
-│   └── pipeline.ipynb
-├── README.md
-├── requirements.txt
-└── sys_requirements.txt
-
+|   .gitignore
+|   LICENSE
+|   pass.env
+|   README.md
+|   requirements.txt
+|   sys_requirements.txt
++---data
+|   |   id_counter.txt
+|   +---embed_data
+|   |   |   errors.jsonl
+|   |   +---source
+|   |   |       text_chunked.jsonl
+|   |   \---target
+|   |           text_chunked.jsonl
+|   +---faiss_indices
+|   |       faiss_csv.csv
+|   |       faiss_index.index
+|   \---pdf_document
+|           Sports_Rehabilitation_and_Injury_Prevention.pdf
+|           Sport_injury_prevent_2009.pdf
++---evaluation
+|   +---evaluation_data_storages
+|   |   |   documentation.md
+|   |   +---elasticsearch
+|   |   |       elastic.ipynb
+|   |   |       eval_elastic.ipynb
+|   |   +---faiss
+|   |   |       conncatinatior.py
+|   |   |       embedding_extractor.py
+|   |   |       request.ipynb
+|   |   \---mongodb
+|   |           eval_mongo.ipynb
+|   |           mongoDB.ipynb
+|   \---evaluation_QA_system
+|       |   evaluation_pipeline.ipynb
+|       |   explore_questions.ipynb
+|       |   full_text_evaluation.py
+|       |   RAG_evaluator.py
+|       \---dataset_filter
+|               filter_data.ipynb
++---information_retrieval
+|   |   data_process.py
+|   |   __init__.py
+|   +---document_encoding
+|   |   |   bioBERT_encoder.py
+|   |   |   chungking_document.ipynb
+|   |   |   encode_documents.ipynb
+|   |   |   text_chunking.py
+|   |   |   __init__.py
+|   +---elastic_container
+|   |       elastic.ipynb
+|   |       elastic_indexing.py
+|   |       errors.jsonl
+|   |       start_elasticsearch.sh
+|   +---faiss_container
+|   |   |   docker-compose.yml
+|   |   |   Dockerfile
+|   |   |   faiss_insert_data.py
+|   |   |   server.py
+\---rag_system
+    |   app.py
+    |   bioBERT_retriever.py
+    |   bm25_retriever.py
+    |   hybrid_retriever.py
+    |   med_rag.py
+    |   openAI_chat.py
+    |   pipeline.ipynb
+    |   __init__.py
 ```
 
 ## Installation
@@ -82,7 +102,7 @@ To set up the Medical RAG System, follow these steps:
 1. **Clone the Repository**
 
    ```
-   git clone https://github.com/slinusc/medical_RAG_system.git
+   git clone https://github.com/dungnd207946/Medical_RAG.git
    cd medical_RAG_system
    ```
 
@@ -115,10 +135,13 @@ The system can be used for different purposes, including document retrieval, que
 - **Medical RAG**: `rag_system/med_rag.py`
 - **OpenAI Chat**: `rag_system/openAI_chat.py`
 
-### Datasets
+### Data
 
-The 2.4M PubmEd subset we used can be accessed here: [slinusc/PubMedAbstractsSubset](https://huggingface.co/datasets/slinusc/PubMedAbstractsSubset).
- If you're looking for the precomputed embedding vectors (MedCPT) used in our work [*Efficient and Reproducible Biomedical Question Answering using Retrieval Augmented Generation*](https://arxiv.org/abs/2505.07917), they are available in a separate dataset: [slinusc/PubMedAbstractsSubsetEmbedded](https://huggingface.co/datasets/slinusc/PubMedAbstractsSubsetEmbedded).
+The 2 PDF documents we used are cited: 
+- John Wiley & Sons (2010). Sports Rehabilitation and Injury Prevention. 
+- Roald Bahr (2009). Handbook of Sports Medicine and Science: Sports Injury Prevention. 
+
+If you're looking for the precomputed embedding vectors (MedCPT) used in our work [*Efficient and Reproducible Biomedical Question Answering using Retrieval Augmented Generation*](https://arxiv.org/abs/2505.07917), they are available in a separate dataset: [slinusc/PubMedAbstractsSubsetEmbedded](https://huggingface.co/datasets/slinusc/PubMedAbstractsSubsetEmbedded).
 
 ### Evaluation
 
@@ -141,16 +164,15 @@ To run the evaluation pipeline, use the evaluation_pipeline.ipynb notebook locat
 
 The experiments were conducted on the following system:
 
-| **Component**        | **Specification**                          |
-|----------------------|--------------------------------------------|
-| **Architecture**     | x86_64                                     |
-| **CPU**              | 8 CPUs                                     |
-| **Model**            | Intel Core Processor (Broadwell)           |
-| **Memory**           | 32 GiB total, 10 GiB used for buffers/cache |
-| **Storage**          | 240 GiB disk size                          |
-| **Operating System** | Ubuntu 22.04.4 LTS (Jammy)                 |
-| **Kernel Version**   | 5.15.0-102-generic                         |
-| **GPU**              | NVIDIA A30                                 |
+| **Component**        | **Specification**                  |
+|----------------------|------------------------------------|
+| **Architecture**     | x86_64                             |
+| **CPU**              | 8 CPUs                             |
+| **Model**            | Intel Core Processor               |
+| **Memory**           | 16 GiB total                       |
+| **Storage**          | 512 GiB SSD                        |
+| **Operating System** | Windows 11 (64-bit)                |
+| **GPU**              | NVIDIA GeForce RTX 4060 (8GB VRAM) |
 
 
 ## Contributing
@@ -163,25 +185,11 @@ We welcome contributions to enhance the Medical RAG System. Please follow these 
 4. Push to the branch: `git push origin feature-branch`.
 5. Create a pull request.
 
-## 📄 Publications
+## Citaion
+We referenced the article and source code from here:
 
 **Efficient and Reproducible Biomedical Question Answering using Retrieval Augmented Generation**  
 Linus Stuhlmann, Michael Saxer, Jonathan Fürst
-
-Please cite our work:
-
-```bibtex
-@INPROCEEDINGS{11081505,
-  author={Stuhlmann, Linus and Saxer, Michael Alexander and Fürst, Jonathan},
-  booktitle={2025 IEEE Swiss Conference on Data Science (SDS)}, 
-  title={Efficient and Reproducible Biomedical Question Answering Using Retrieval Augmented Generation}, 
-  year={2025},
-  volume={},
-  number={},
-  pages={154-157},
-  keywords={Accuracy;Scalability;Large language models;Retrieval augmented generation;Data science;Information retrieval;Question answering (information retrieval);Hybrid power systems;Time factors;Indexing;Biomedical Information Retrieval;RetrievalAugmented Generation;Hybrid Retrieval;Large Language Models;PubMed;Information Retrieval Systems},
-  doi={10.1109/SDS66131.2025.00029}}
-```
 
 [Read the paper on arXiv](https://arxiv.org/abs/2505.07917)
 
