@@ -1,0 +1,52 @@
+services:
+  faiss-app:
+    build:
+      context: ./medical_RAG_system/information_retrieval/faiss_container
+      dockerfile: Dockerfile.faiss
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./medical_RAG_system/information_retrieval/faiss_container/server.py:/app/server.py
+      - ./medical_RAG_system/data/faiss_indices:/app/faiss_indices
+      - ./medical_RAG_system/information_retrieval/faiss_container/PMIDs:/app/PMIDs
+    working_dir: /app
+    environment:
+      - FLASK_APP=server.py
+      - FLASK_RUN_HOST=0.0.0.0
+
+  streamlit-app:
+    build:
+      context: .
+      dockerfile: medical_RAG_system/rag_system/Dockerfile.streamlit
+    ports:
+      - "8501:8501"
+    env_file:
+      - medical_RAG_system/pass.env
+    environment:
+      - ELASTIC_URL=http://es01:9200
+      - FAISS_URL=http://faiss-app:5000/search
+    depends_on:
+      - es01
+      - faiss-app
+  
+  ingest-job:
+    build:
+      context: .
+      dockerfile: medical_RAG_system/rag_system/Dockerfile.streamlit
+    environment:
+      - ELASTIC_URL=http://es01:9200
+      - SOURCE_DIR=/app/data/embed_data/source
+      - ERROR_LOG_PATH=/app/data/embed_data/errors.jsonl
+    volumes:
+      - ./medical_RAG_system/data:/app/data
+    command: [ "python", "/app/medical_RAG_system/information_retrieval/elastic_container/elastic_indexing.py" ]
+      
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"
