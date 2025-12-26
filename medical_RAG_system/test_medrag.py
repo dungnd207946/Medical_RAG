@@ -13,7 +13,7 @@ print("Bắt đầu chạy các test cho MedRAG...")
 def rag_instance():
     return MedRAG(retriever=1, question_type=1)
 
-'''
+
 # 1. Kiểm tra khởi tạo (Smoke Test)
 def test_initialization(rag_instance):
     assert rag_instance is not None
@@ -84,7 +84,7 @@ def test_inference_reasoning(rag_instance):
     keywords = ["không an toàn", "nguy hiểm", "dị ứng", "penicillin"]
     assert any(word in answer for word in keywords), "LLM không thực hiện được suy luận logic y khoa"
 
-'''
+
 def test_automated_evaluation(rag_instance):
     with open('D:/GitHub/Medical_RAG/medical_RAG_system/rag_system/test_medrag.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -111,3 +111,4 @@ if __name__ == "__main__":
 
 
 print("Tất cả các test đã hoàn thành.")
+
