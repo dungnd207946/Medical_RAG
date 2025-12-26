@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "domain": "General Medicine",
+    "language": "vi"
+  },
+  "samples": [
+    {
+      "id": 1,
+      "question": "Triệu chứng điển hình của đột quỵ (tai biến mạch máu não) là gì?",
+      "ground_truth": "Triệu chứng thường gặp (quy tắc FAST): Méo miệng, yếu liệt tay chân một bên, ngôn ngữ bất thường (nói ngọng, khó nói) và xuất hiện đột ngột.",
+      "keywords": ["FAST", "méo miệng", "yếu liệt", "nói ngọng"]
+    },
+    {
+      "id": 2,
+      "question": "Liều dùng Paracetamol tối đa cho người lớn trong 24 giờ là bao nhiêu?",
+      "ground_truth": "Liều tối đa là 4g (4000mg) trong 24 giờ, mỗi lần uống cách nhau ít nhất 4-6 giờ để tránh ngộ độc gan.",
+      "keywords": ["4g", "4000mg", "độc gan", "4-6 giờ"]
+    },
+    {
+      "id": 3,
+      "question": "Phân biệt sốt xuất huyết và sốt siêu vi thông thường?",
+      "ground_truth": "Sốt xuất huyết thường sốt cao liên tục 2-7 ngày, kèm chấm xuất huyết dưới da, chảy máu cam/răng và giảm tiểu cầu; sốt siêu vi thường giảm sốt sau 3-5 ngày và ít có biểu hiện xuất huyết.",
+      "keywords": ["chấm xuất huyết", "giảm tiểu cầu", "sốt cao liên tục"]
+    },
+    {
+      "id": 4,
+      "question": "Người bị cao huyết áp nên hạn chế ăn gì?",
+      "ground_truth": "Nên hạn chế muối (natri), thực phẩm chế biến sẵn, mỡ động vật, rượu bia và các chất kích thích.",
+      "keywords": ["giảm muối", "natri", "mỡ động vật", "rượu bia"]
+    },
+    {
+      "id": 5,
+      "question": "Dấu hiệu nhận biết trẻ em bị mất nước khi tiêu chảy?",
+      "ground_truth": "Mắt trũng, khóc không ra nước mắt, môi khô, khát nước dữ dội, nếp véo da mất chậm và thóp trũng (ở trẻ nhỏ).",
+      "keywords": ["mắt trũng", "môi khô", "khóc không nước mắt", "nếp véo da"]
+    },
+    {
+      "id": 6,
+      "question": "Chỉ số đường huyết lúc đói bình thường là bao nhiêu?",
+      "ground_truth": "Chỉ số bình thường khoảng 70 - 100 mg/dL (3.9 - 5.6 mmol/L). Từ 100-125 mg/dL được coi là tiền tiểu đường.",
+      "keywords": ["70-100 mg/dL", "3.9-5.6 mmol/L", "tiền tiểu đường"]
+    },
+    {
+      "id": 7,
+      "question": "Cách xử lý khi bị bỏng nước sôi tại nhà?",
+      "ground_truth": "Ngâm vùng bị bỏng dưới vòi nước sạch mát (không dùng đá) trong 15-20 phút, sau đó che phủ bằng gạc sạch, không bôi kem đánh răng hay mỡ trăn.",
+      "keywords": ["nước mát", "15-20 phút", "không bôi kem đánh răng", "gạc sạch"]
+    },
+    {
+      "id": 8,
+      "question": "Phụ nữ mang thai có được sử dụng thuốc Ibuprofen không?",
+      "ground_truth": "Cần thận trọng, đặc biệt chống chỉ định trong 3 tháng cuối thai kỳ vì có thể gây đóng ống động mạch sớm và ảnh hưởng đến thận thai nhi.",
+      "keywords": ["chống chỉ định", "3 tháng cuối", "đóng ống động mạch"]
+    },
+    {
+      "id": 9,
+      "question": "Triệu chứng của bệnh đau dạ dày do vi khuẩn HP?",
+      "ground_truth": "Đau vùng thượng vị, ợ chua, đầy hơi, buồn nôn, đau tăng lên khi đói hoặc sau khi ăn, chẩn đoán xác định qua test hơi thở hoặc nội soi.",
+      "keywords": ["thượng vị", "ợ chua", "test hơi thở", "HP"]
+    },
+    {
+      "id": 10,
+      "question": "Lợi ích của việc tiêm vaccine HPV là gì?",
+      "ground_truth": "Giúp ngăn ngừa ung thư cổ tử cung, ung thư hậu môn, mụn cóc sinh dục do các chủng virus HPV gây ra.",
+      "keywords": ["ung thư cổ tử cung", "mụn cóc sinh dục", "ngăn ngừa"]
+    },
+    {
+      "id": 11,
+      "question": "Dấu hiệu cảnh báo thiếu máu thiếu sắt?",
+      "ground_truth": "Mệt mỏi, da xanh xao, niêm mạc mắt nhợt nhạt, hoa mắt chóng mặt, móng tay giòn, dễ gãy.",
+      "keywords": ["da xanh", "niêm mạc nhợt", "mệt mỏi", "móng tay giòn"]
+    },
+    {
+      "id": 12,
+      "question": "Khi nào người bệnh tiểu đường cần đi cấp cứu ngay?",
+      "ground_truth": "Khi có dấu hiệu hôn mê, hơi thở có mùi trái cây (toan ceton), lơ mơ, co giật hoặc đường huyết hạ quá thấp gây vã mồ hôi, run rẩy.",
+      "keywords": ["toan ceton", "hơi thở mùi trái cây", "hạ đường huyết", "hôn mê"]
+    },
+    {
+      "id": 13,
+      "question": "Tác dụng phụ thường gặp của thuốc kháng sinh?",
+      "ground_truth": "Rối loạn tiêu hóa (tiêu chảy, buồn nôn), dị ứng da, phát ban và nguy cơ kháng kháng sinh nếu dùng không đúng liều.",
+      "keywords": ["tiêu chảy", "dị ứng", "phát ban", "kháng thuốc"]
+    },
+    {
+      "id": 14,
+      "question": "Làm thế nào để phòng ngừa bệnh loãng xương?",
+      "ground_truth": "Bổ sung đầy đủ Canxi và Vitamin D, tập thể dục thường xuyên, hạn chế rượu bia, thuốc lá và đo mật độ xương định kỳ.",
+      "keywords": ["Canxi", "Vitamin D", "tập thể dục", "mật độ xương"]
+    },
+    {
+      "id": 15,
+      "question": "Triệu chứng viêm ruột thừa cấp tính?",
+      "ground_truth": "Đau bắt đầu vùng quanh rốn sau đó khu trú ở hố chậu phải, sốt nhẹ, buồn nôn, thành bụng căng cứng.",
+      "keywords": ["hố chậu phải", "quanh rốn", "sốt nhẹ", "buồn nôn"]
+    },
+    {
+      "id": 16,
+      "question": "Chỉ số BMI bao nhiêu được coi là béo phì?",
+      "ground_truth": "Theo WHO, BMI >= 30 là béo phì. Với người châu Á (IDP), BMI >= 25 đã được coi là béo phì.",
+      "keywords": ["BMI", "30", "25", "châu Á"]
+    },
+    {
+      "id": 17,
+      "question": "Sơ cứu đúng cách khi bị ong đốt?",
+      "ground_truth": "Lấy ngòi độc ra (nếu có), rửa sạch vết thương bằng xà phòng, chườm lạnh để giảm sưng và theo dõi phản ứng dị ứng/sốc phản vệ.",
+      "keywords": ["lấy ngòi", "xà phòng", "chườm lạnh", "sốc phản vệ"]
+    },
+    {
+      "id": 18,
+      "question": "Bệnh Gout (Gút) nên kiêng thực phẩm nào?",
+      "ground_truth": "Kiêng thực phẩm giàu purin như nội tạng động vật, thịt đỏ, hải sản và các loại đồ uống có đường, rượu bia.",
+      "keywords": ["purin", "nội tạng", "thịt đỏ", "hải sản"]
+    },
+    {
+      "id": 19,
+      "question": "Tại sao không nên tự ý dừng thuốc kháng sinh khi thấy triệu chứng đã giảm?",
+      "ground_truth": "Việc dừng thuốc sớm khiến vi khuẩn chưa bị tiêu diệt hết, dẫn đến tình trạng kháng thuốc và bệnh dễ tái phát nặng hơn.",
+      "keywords": ["kháng thuốc", "tái phát", "vi khuẩn chưa chết hết"]
+    },
+    {
+      "id": 20,
+      "question": "Tác dụng của việc chườm nóng và chườm lạnh trong chấn thương?",
+      "ground_truth": "Chườm lạnh dùng cho chấn thương mới (trong 48h đầu) để giảm sưng, đau. Chườm nóng dùng cho đau mãn tính, cứng khớp để tăng tuần hoàn máu.",
+      "keywords": ["lạnh - chấn thương mới", "nóng - mãn tính", "giảm sưng"]
+    }
+  ]
+}
