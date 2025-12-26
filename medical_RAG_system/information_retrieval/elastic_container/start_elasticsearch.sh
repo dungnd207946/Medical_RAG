@@ -18,6 +18,12 @@ fi
 
 docker pull docker.elastic.co/elasticsearch/elasticsearch:8.13.4
 
+# 4. Xóa container cũ nếu tồn tại (để tránh lỗi "The name es01 is already in use")
+if [ "$(docker ps -aq -f name=es01)" ]; then
+    echo "Entferne alten Container 'es01'..."
+    docker rm -f es01
+fi
+
 # Elasticsearch-Container starten
 echo "Starte Elasticsearch-Container..."
 docker run \
@@ -25,9 +31,12 @@ docker run \
   --net elastic \
   -p 9200:9200 \
   -it \
-  -m 32GB \
+  -d \
+  -m 4GB \
   --volume elasticsearch_data:/usr/share/elasticsearch/data \
-  -e "ES_JAVA_OPTS=-Xms16g -Xmx16g" \ 
+  -e "discovery.type=single-node" \
+  -e "xpack.security.enabled=false" \
+  -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" \
   docker.elastic.co/elasticsearch/elasticsearch:8.13.4
 
 # 16GB RAM im Heap festlegen (Xms und Xmx) um OutOfMemoryError zu vermeiden
