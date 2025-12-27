@@ -1,6 +1,6 @@
 services:
   faiss-app:
-    image: us-central1-docker:pkg:dev/${GCP_PROJECT_ID}/faiss-app:${IMAGE_TAG}
+    image: us-central1-docker.pkg.dev/${GCP_PROJECT_ID}/medical-rag/faiss-app:${IMAGE_TAG}
     ports:
       - "5000:5000"
     volumes:
@@ -13,7 +13,7 @@ services:
       - FLASK_RUN_HOST=0.0.0.0
 
   streamlit-app:
-    image: us-central1-docker:pkg:dev/${GCP_PROJECT_ID}/streamlit-app:${IMAGE_TAG}
+    image: us-central1-docker.pkg.dev/${GCP_PROJECT_ID}/medical-rag/streamlit-app:${IMAGE_TAG}
     ports:
       - "8501:8501"
     env_file:

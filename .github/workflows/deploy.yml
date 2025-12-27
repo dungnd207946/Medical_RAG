@@ -98,7 +98,8 @@ jobs:
             --command "sudo sh -lc 'set -e
               cd \"${{ env.DEPLOY_DIR }}\"
 
-              export IMAGE_TAG=\"${TAG}\"
+              export GCP_PROJECT_ID=\"${{ secrets.GCP_PROJECT_ID }}\"
+              export IMAGE_TAG=\"${GITHUB_SHA}\"
               export REGISTRY=\"${REGISTRY}\"
 
               docker compose -f docker-compose.prod.yml pull
