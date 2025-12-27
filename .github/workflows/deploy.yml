@@ -1,0 +1,141 @@
+name: Build & Deploy to GCE (Artifact Registry)
+
+on:
+  push:
+    branches: [ "tuandt" ]
+  workflow_dispatch:
+
+env:
+  # ==== GCP / Artifact Registry ====
+  GCP_PROJECT_ID: compelling-moon-482415-s7
+  GCP_REGION: us-central1
+  #AR_REPO: ${{ secrets.ARTIFACT_REPO }}                 # ví dụ: medical-rag-repo
+
+  # ==== Image names in Artifact Registry ====
+  IMAGE_STREAMLIT: streamlit-app
+  IMAGE_FAISS: faiss-app
+
+  # ==== GCE VM deploy target ====
+  GCE_INSTANCE: instance-20251226-151751
+  GCE_ZONE: us-central1-f
+  DEPLOY_DIR: /home/thanhtuan102001/Medical_RAG
+
+jobs:
+  build_push:
+    name: Build & Push Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Cách đơn giản nhất: dùng Service Account JSON key.
+      # (Nếu bạn muốn Workload Identity Federation - "xịn" hơn, mình cũng viết được ngay.)
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: |
+            {
+              "type": "service_account",
+              "project_id": "compelling-moon-482415-s7",
+              "private_key_id": "bfc55f703a7bd49a886b7deece320301beedf653",
+              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCqciywyFp1D7ex\n1Y80FwuB4yavnZ9nmQXXeGjVgXeRp9yzofKjikuLr1PikYctPYWu9wLl3VDYSFfr\nEvG6ziS5SeOzomrDE1mZvJnfQO1VmLH7vCf61huD81PBG7ImRjxjwaIRF3waLcTA\neMzFjRNY3DCoUeKUfRGAV5c7TT6cJ7SU5j4nEAK1dSD182DpzsPN5Nk4/gW+9ZzX\n2M9VvXkrVncaegsLHwEmRLPieqpZUYx5hUggrnvqCI9s5nCk5PB00v66itrZgrbe\nljCFwRdEBcFxhb2XpDOPycy+XAnF/KB0UobWk6sakqD3lU17FMPE38Lk9RJZ3qAo\njASbi55rAgMBAAECggEAHnJ0z0OK/RxIqSjIAvsW4CXulDJo9j2ckIf+2hzdehRt\nVV1ZlaMvqY0xQ+jRJ+C0j7OqPduSBICvy9s/eSo33y120nDx91TujYrmRb44ZzD2\nokxTK/ixQ5nk3TsQUMv9H6jIRZtXXOnOGr+5fJSd3yK+QmMWQYYx6SY8aqh6xbP6\n5K/O8cT6HIc/Ooroly8sb4icfd+bsal+uONIvgJEeCk6/viQmXZwGsmFGaeHvO2A\nmCNfppFAiTD2MPLZGJ0OcPVUpHviZg5zjO3eVPU6WOTVORFnOqtN5hxWzYvurz1r\nZiW9cUWSVCDj+3ypJPOUMcMcnFeaDjTstP2mWbK2mQKBgQDrESpmlF8+pA02q4xy\nYCdhFNrb/ZUdo/22dUWysR5UJggKEE0godtfejuOxTx0g8o0uXJMHSmfOjb65hNS\n6+WnyQTL0dxV6PfoOpWVCRIaxsO+VNubjO6KAW8+w3ovd4TnBsWMM9AD++62NpuN\n2Rl1lMlidVrQ7+DCt49U6Vq39wKBgQC5n9b3LjC2vWJSju5aUcQr16bzqlyxPAcL\nqQ19OW2a1Qeukk8JuXj0EBvHQZKWY9BNajlYHrO+Qn5NIcwNT+Zan7Ise+cG4ExR\ntGTGjCc/4asaiLJvoBK9I9rfooW+KNqM5M/K4KBeJ7t3Mu8FEdxQ+rl/kKOr7wK4\nrzENCi74LQKBgAUjzfKKQf7jpWpRm/OQSKwlwZdX1x/byxtnOwvqNYiPgFOAAb+5\n6ksPKCg6BdViYFSAzY/+fz99DWC1ES0Z/V6K1bEDOLckLe+FAGpO1XeCaxtJTbf7\n/+dCmsUbjxtkmKJYko87PswngRO44/PZEGZyx2iAumihJh/71YV8yMAHAoGAMZbF\n8trgILGPZsbQXkihw6Sk8Ut938tNhovvEpkY8tgeaUCk5NArw+fZw+18n7iimUvb\nbfMlyZox66Evxg6mV2d6Te/71BZvzRQIKBKhGavL7ha+tJtq5iSCAGSGnjqDyEgI\nSwafUQgESN/Ogug2l1uj2rRlRTVg4L3MuNMToTECgYBnWdsKjw6SA0bKlAn5Jf5l\n+wd/4goI+M1HAMFOIrSb1b9BLRye6kw9BeorJXqf47dKS/WVyus7N4eu7YAtx/nu\n1gCizBRn8RuTFn4sGKhQiCWt2h0LquDJPLnU3JEdpaL9gjr5BPH3VIXWNnXgSno2\nuyTRRI4KqkP9x5wkJJyJnQ==\n-----END PRIVATE KEY-----\n",
+              "client_email": "github-action-deploy@compelling-moon-482415-s7.iam.gserviceaccount.com",
+              "client_id": "114262687771688461270",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://oauth2.googleapis.com/token",
+              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/github-action-deploy%40compelling-moon-482415-s7.iam.gserviceaccount.com",
+              "universe_domain": "googleapis.com"
+            }
+            
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker auth for Artifact Registry
+        run: |
+          gcloud auth configure-docker $GCP_REGION-docker.pkg.dev --quiet
+
+      - name: Set registry base
+        id: vars
+        run: |
+          echo "REGISTRY=$GCP_REGION-docker.pkg.dev/$GCP_PROJECT_ID/$AR_REPO" >> $GITHUB_OUTPUT
+          echo "TAG=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v3
+
+      # --- Build & push Streamlit image ---
+      - name: Build & Push Streamlit
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: medical_RAG_system/rag_system/Dockerfile.streamlit
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_STREAMLIT }}:${{ steps.vars.outputs.TAG }}
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_STREAMLIT }}:latest
+
+      # --- Build & push FAISS image ---
+      - name: Build & Push FAISS
+        uses: docker/build-push-action@v6
+        with:
+          context: medical_RAG_system/information_retrieval/faiss_container
+          file: medical_RAG_system/information_retrieval/faiss_container/Dockerfile.faiss
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:${{ steps.vars.outputs.TAG }}
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:latest
+
+  deploy_vm:
+    name: Deploy on GCE VM
+    runs-on: ubuntu-latest
+    needs: [ build_push ]
+
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: |
+            {
+              "type": "service_account",
+              "project_id": "compelling-moon-482415-s7",
+              "private_key_id": "bfc55f703a7bd49a886b7deece320301beedf653",
+              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCqciywyFp1D7ex\n1Y80FwuB4yavnZ9nmQXXeGjVgXeRp9yzofKjikuLr1PikYctPYWu9wLl3VDYSFfr\nEvG6ziS5SeOzomrDE1mZvJnfQO1VmLH7vCf61huD81PBG7ImRjxjwaIRF3waLcTA\neMzFjRNY3DCoUeKUfRGAV5c7TT6cJ7SU5j4nEAK1dSD182DpzsPN5Nk4/gW+9ZzX\n2M9VvXkrVncaegsLHwEmRLPieqpZUYx5hUggrnvqCI9s5nCk5PB00v66itrZgrbe\nljCFwRdEBcFxhb2XpDOPycy+XAnF/KB0UobWk6sakqD3lU17FMPE38Lk9RJZ3qAo\njASbi55rAgMBAAECggEAHnJ0z0OK/RxIqSjIAvsW4CXulDJo9j2ckIf+2hzdehRt\nVV1ZlaMvqY0xQ+jRJ+C0j7OqPduSBICvy9s/eSo33y120nDx91TujYrmRb44ZzD2\nokxTK/ixQ5nk3TsQUMv9H6jIRZtXXOnOGr+5fJSd3yK+QmMWQYYx6SY8aqh6xbP6\n5K/O8cT6HIc/Ooroly8sb4icfd+bsal+uONIvgJEeCk6/viQmXZwGsmFGaeHvO2A\nmCNfppFAiTD2MPLZGJ0OcPVUpHviZg5zjO3eVPU6WOTVORFnOqtN5hxWzYvurz1r\nZiW9cUWSVCDj+3ypJPOUMcMcnFeaDjTstP2mWbK2mQKBgQDrESpmlF8+pA02q4xy\nYCdhFNrb/ZUdo/22dUWysR5UJggKEE0godtfejuOxTx0g8o0uXJMHSmfOjb65hNS\n6+WnyQTL0dxV6PfoOpWVCRIaxsO+VNubjO6KAW8+w3ovd4TnBsWMM9AD++62NpuN\n2Rl1lMlidVrQ7+DCt49U6Vq39wKBgQC5n9b3LjC2vWJSju5aUcQr16bzqlyxPAcL\nqQ19OW2a1Qeukk8JuXj0EBvHQZKWY9BNajlYHrO+Qn5NIcwNT+Zan7Ise+cG4ExR\ntGTGjCc/4asaiLJvoBK9I9rfooW+KNqM5M/K4KBeJ7t3Mu8FEdxQ+rl/kKOr7wK4\nrzENCi74LQKBgAUjzfKKQf7jpWpRm/OQSKwlwZdX1x/byxtnOwvqNYiPgFOAAb+5\n6ksPKCg6BdViYFSAzY/+fz99DWC1ES0Z/V6K1bEDOLckLe+FAGpO1XeCaxtJTbf7\n/+dCmsUbjxtkmKJYko87PswngRO44/PZEGZyx2iAumihJh/71YV8yMAHAoGAMZbF\n8trgILGPZsbQXkihw6Sk8Ut938tNhovvEpkY8tgeaUCk5NArw+fZw+18n7iimUvb\nbfMlyZox66Evxg6mV2d6Te/71BZvzRQIKBKhGavL7ha+tJtq5iSCAGSGnjqDyEgI\nSwafUQgESN/Ogug2l1uj2rRlRTVg4L3MuNMToTECgYBnWdsKjw6SA0bKlAn5Jf5l\n+wd/4goI+M1HAMFOIrSb1b9BLRye6kw9BeorJXqf47dKS/WVyus7N4eu7YAtx/nu\n1gCizBRn8RuTFn4sGKhQiCWt2h0LquDJPLnU3JEdpaL9gjr5BPH3VIXWNnXgSno2\nuyTRRI4KqkP9x5wkJJyJnQ==\n-----END PRIVATE KEY-----\n",
+              "client_email": "github-action-deploy@compelling-moon-482415-s7.iam.gserviceaccount.com",
+              "client_id": "114262687771688461270",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://oauth2.googleapis.com/token",
+              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/github-action-deploy%40compelling-moon-482415-s7.iam.gserviceaccount.com",
+              "universe_domain": "googleapis.com"
+            }
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy via gcloud compute ssh
+        run: |
+          TAG=${GITHUB_SHA}
+          REGISTRY="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}"
+
+          gcloud compute ssh "${{ secrets.GCE_INSTANCE }}" \
+            --zone "${{ secrets.GCE_ZONE }}" \
+            --command "set -e
+              cd '${{ env.DEPLOY_DIR }}'
+
+              # Tag dùng để compose pull đúng phiên bản
+              export IMAGE_TAG='${TAG}'
+              export REGISTRY='${REGISTRY}'
+
+              # Pull images mới
+              docker compose -f docker-compose.prod.yml pull
+
+              # Restart stack (khuyến nghị: luôn kéo image mới)
+              docker compose -f docker-compose.prod.yml up -d --remove-orphans
+              
+              docker compose -f docker-compose.prod.yml run --rm ingest-job
+
+              # Dọn image cũ (tuỳ chọn)
+              docker image prune -f
+            "
