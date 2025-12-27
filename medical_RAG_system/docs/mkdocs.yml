@@ -1,0 +1,9 @@
+site_name: Medical Chatbot RAG Documentation
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Data: data_storage_evaluation.md
+  - Versioning: versioning.md

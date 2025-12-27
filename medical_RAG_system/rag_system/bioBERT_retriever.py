@@ -23,7 +23,7 @@ class BioBERTRetriever:
         embedding = self.query_encoder.encode(text)
         return embedding
 
-    def faiss_query(self, query: str, k: int = 2):
+    def faiss_query(self, query: str, k: int = 5):
         """Performs a vector search using FAISS with the given query and k."""
         faiss_data = FaissData()
         vec = self.query_to_vector(query).tolist()  # Convert numpy array to list
