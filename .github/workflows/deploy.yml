@@ -14,6 +14,7 @@ env:
   # ==== Image names in Artifact Registry ====
   IMAGE_STREAMLIT: streamlit-app
   IMAGE_FAISS: faiss-app
+  IMAGE_MKDOCS: mkdocs
 
   # ==== GCE VM deploy target ====
   GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
@@ -81,8 +82,8 @@ jobs:
           file: medical_RAG_system/docs/Dockerfile
           push: true
           tags: |
-            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:${{ steps.vars.outputs.TAG }}
-            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:latest
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_MKDOCS }}:${{ steps.vars.outputs.TAG }}
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_MKDOCS }}:latest
 
   deploy_vm:
     name: Deploy on GCE VM
