@@ -101,7 +101,9 @@ jobs:
               export GCP_PROJECT_ID=\"${{ secrets.GCP_PROJECT_ID }}\"
               export IMAGE_TAG=\"${GITHUB_SHA}\"
               export REGISTRY=\"${REGISTRY}\"
-
+              
+              git checkout tuandt
+              git pull origin tuandt
               gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://${{ env.GCP_REGION }}-docker.pkg.dev
 
               docker compose -f docker-compose.prod.yml pull
