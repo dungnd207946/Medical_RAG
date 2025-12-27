@@ -73,6 +73,16 @@ jobs:
           tags: |
             ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:${{ steps.vars.outputs.TAG }}
             ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:latest
+            
+      - name: Build & Push MkDocs
+        uses: docker/build-push-action@v6
+        with:
+          context: medical_RAG_system/docs
+          file: medical_RAG_system/docs/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:${{ steps.vars.outputs.TAG }}
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:latest
 
   deploy_vm:
     name: Deploy on GCE VM
