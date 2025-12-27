@@ -9,7 +9,7 @@ env:
   # ==== GCP / Artifact Registry ====
   GCP_PROJECT_ID: compelling-moon-482415-s7
   GCP_REGION: us-central1
-  #AR_REPO: ${{ secrets.ARTIFACT_REPO }}                 # ví dụ: medical-rag-repo
+  AR_REPO: medical-rag
 
   # ==== Image names in Artifact Registry ====
   IMAGE_STREAMLIT: streamlit-app
@@ -117,10 +117,10 @@ jobs:
       - name: Deploy via gcloud compute ssh
         run: |
           TAG=${GITHUB_SHA}
-          REGISTRY="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}"
+          REGISTRY="${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.AR_REPO }}"
 
-          gcloud compute ssh "${{ secrets.GCE_INSTANCE }}" \
-            --zone "${{ secrets.GCE_ZONE }}" \
+          gcloud compute ssh "${{ env.GCE_INSTANCE }}" \
+            --zone "${{ env.GCE_ZONE }}" \
             --command "set -e
               cd '${{ env.DEPLOY_DIR }}'
 
