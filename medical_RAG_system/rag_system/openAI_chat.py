@@ -2,8 +2,16 @@ import openai
 import google.generativeai as genai
 import os
 import json
+import yaml
 from typing import List, Dict
-from dotenv import dotenv_values
+from dotenv import dotenv_values, load_dotenv
+
+load_dotenv("medical_RAG_system/pass.env")
+version = os.getenv("RAG_VERSION")
+with open(f"medical_RAG_system/versions/{version}.yaml") as f:
+    config = yaml.safe_load(f)
+
+config_version = config
 
 class Chat:
     def __init__(self, question_type: int = 1, model=genai.GenerativeModel("models/gemini-2.5-flash")):

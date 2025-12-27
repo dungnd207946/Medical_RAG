@@ -1,0 +1,18 @@
+rag_system_version: v2.0
+
+data:
+  knowledge_base: v2.0
+
+embedding:
+  model: dmis-lab/biobert-v1.1
+
+index:
+  collection_name: injury_prevent_index_v2
+
+llm:
+  model: gemini-2.5-flash
+  prompt_version: v2.0
+
+retrieval:
+  top_k: 10
+  reranker: cross-encoder/ms-marco-MiniLM-L-6-v2
