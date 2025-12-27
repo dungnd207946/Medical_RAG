@@ -26,7 +26,7 @@ services:
       - faiss-app
   
   ingest-job:
-    image: us-central1-docker:pkg:dev/${GCP_PROJECT_ID}/ingest-job:${IMAGE_TAG}
+    image: us-central1-docker.pkg.dev/${GCP_PROJECT_ID}/medical-rag/ingest-job:${IMAGE_TAG}
     environment:
       - ELASTIC_URL=http://es01:9200
       - SOURCE_DIR=/app/data/embed_data/source
