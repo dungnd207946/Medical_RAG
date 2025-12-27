@@ -95,21 +95,14 @@ jobs:
 
           gcloud compute ssh "${{ env.GCE_INSTANCE }}" \
             --zone "${{ env.GCE_ZONE }}" \
-            --command "set -e
-              cd '${{ env.DEPLOY_DIR }}'
+            --command "sudo sh -lc 'set -e
+              cd \"${{ env.DEPLOY_DIR }}\"
 
-              # Tag dùng để compose pull đúng phiên bản
-              export IMAGE_TAG='${TAG}'
-              export REGISTRY='${REGISTRY}'
+              export IMAGE_TAG=\"${TAG}\"
+              export REGISTRY=\"${REGISTRY}\"
 
-              # Pull images mới
               docker compose -f docker-compose.prod.yml pull
-
-              # Restart stack (khuyến nghị: luôn kéo image mới)
               docker compose -f docker-compose.prod.yml up -d --remove-orphans
-              
-              docker compose -f docker-compose.prod.yml run --rm ingest-job
-
-              # Dọn image cũ (tuỳ chọn)
               docker image prune -f
-            "
+            '"
+      
