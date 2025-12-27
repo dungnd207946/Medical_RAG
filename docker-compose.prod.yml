@@ -21,6 +21,7 @@ services:
     environment:
       - ELASTIC_URL=http://es01:9200
       - FAISS_URL=http://faiss-app:5000/search
+      - HF_KEY=${HF_KEY}
     depends_on:
       - es01
       - faiss-app
