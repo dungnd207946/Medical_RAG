@@ -7,17 +7,17 @@ on:
 
 env:
   # ==== GCP / Artifact Registry ====
-  GCP_PROJECT_ID: compelling-moon-482415-s7
-  GCP_REGION: us-central1
-  AR_REPO: medical-rag
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_REGION: ${{ secrets.GCP_REGION }}
+  AR_REPO: ${{ secrets.ARTIFACT_REPO }}
 
   # ==== Image names in Artifact Registry ====
   IMAGE_STREAMLIT: streamlit-app
   IMAGE_FAISS: faiss-app
 
   # ==== GCE VM deploy target ====
-  GCE_INSTANCE: instance-20251226-151751
-  GCE_ZONE: us-central1-f
+  GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
+  GCE_ZONE: ${{ secrets.GCE_ZONE }}
   DEPLOY_DIR: /home/thanhtuan102001/Medical_RAG
 
 jobs:
@@ -34,20 +34,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: |
-            {
-              "type": "service_account",
-              "project_id": "compelling-moon-482415-s7",
-              "private_key_id": "f2ac62c40ad2a32779291fd4a9c58c4ef6a5c5b1",
-              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDYm81Qr03Uz5no\nTTrL6iiGkHSHy7exzTpYTL1Hf4cPINcB1ijlr0dsvIR9gRMK+4vflHYE62mSzzGJ\nj5+F3jIA+jaquDOZkhRJuFs5PyPBCVqpOEQwX55UVVd2h6R4OQr9oDqJdk+fDQuH\nBcrW6ShvLiRHbHc+yf8axbyMWolaTTF7ZdWn7k9uBcDeWWsZ4fOPfNXRhF9jmjWk\nA43MYK/Pd5u31VsObkIcQG6K4q4wIM3pwxrX8Zh7jPozTmEFcyxiTnYUdAMrI92z\nVER0HYcjxzsAsMvL0Z4zS+RLPS16/MoatIALan+PB9ObfP43x03rMwp5MwqqL1Y5\nimu18WTPAgMBAAECggEAJ+jU9HfIRFyXw+hu2+Fh5CE7h0Wuq9DfXiONgF3r2Yq4\ncrstv9wCsfMuCh29D3n3dJNbB18EjaslOm4++yBMYEe5yMy1nScAG/EexbZvdQKv\nNJyMW8lSV8F9ovYtBIWmE8Lw5iDpXKm/pPoZPG2rKIj84DgI5IW9PgaOzeFki0F0\n4Ts79I9zy6gTKJbOuRClijujg5SHPEGA5vi+MMbgw9Gl2SKaXh68cl0AL+bhCwEs\n4qGAP3Rf2UxuF0htoFvW8+GAkJOg48hhY7MidyTDmi69PxqEm5H2t/ZePIElPd2G\n5Ibut98Uv9E0Xcxt/Wdg/IKjWtMQhvS7PJbH3/vh2QKBgQD5P0kCHL6V18XRED/w\nEC+Qp911/IPnIkjq8injLjcjZ6LL+3aGKKpp7D2eN8godDTPRDriA7NFCcHNy/Cx\nrKfOTsRpgN7mdG4qdgMtfbubBJNiVkAmDfFo4vhSjJnKO+ylQheOL3D9w8Lvv4ST\nys9igW/8b3Px6Vbi95TaTFJBgwKBgQDeeiTQqixjjTiQEbsb7wSyQxRChyFbLBRx\nKgYp4BhtiyoRKoqkoQ0J9wjt3ARj0LGsbxSIGZQDZakuJfi6gMTv4V5S1ZkGQNlA\nEy36RZV895Io5J6+gJ1QQvfUQR8JSn7GZTMQCD8IVi2LSDnjbBzSa3HbyET4852y\n2nTZE40pxQKBgQCB29AM8q71YOsmpoG5cKVnh54hl8OdS8aT6kGapHyDzL4L6uLw\nuQU4lKXx5fw533mYN2M6WFUxdgjsUQIBgAQZv/4jPcpkZWr0YnH7ZJO3C2ZCiM95\nRDBvxjk8wRZrQFdmLo4ZPWxwOms5AB5x5euw1eFjsynEcx8at4VtSvBcQwKBgDie\nr1XnqUpgu392876lMvXHOpW/3E5exokSX+UyYiUm4Lrjr8s8LZxWoZAfiYJ5r24q\nCvikQdYnfkn/YfDdKsG+AopkUACWanPzLaVfJi9atnjvzjK/esndcUM0m5h6vA7z\n3G39G0Wc4RRsekcV0bP/okeEDYGqRn0pOcmxPyDdAoGBAPUoM8JNEHXRp92CHBYH\n6eXX4pJwxBZuEVyqXUL69UCQ/gmS/2fKdV9zeqslXgmVplBLrTFp507VQcKmpwtl\nvmEemy6fXFnnyVnWpHkOFSkriy7THLVBq/DTVg+wXw6ZI4pph0VH//NOqPrHddzf\nG1O/aeVjHNA7cB8p8yV/KwUO\n-----END PRIVATE KEY-----\n",
-              "client_email": "github-action-deploy@compelling-moon-482415-s7.iam.gserviceaccount.com",
-              "client_id": "114262687771688461270",
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://oauth2.googleapis.com/token",
-              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/github-action-deploy%40compelling-moon-482415-s7.iam.gserviceaccount.com",
-              "universe_domain": "googleapis.com"
-            }
+          credentials_json: ${{ secrets.GCP_SA_KEY_JSON }}
             
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
@@ -96,20 +83,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: |
-            {
-              "type": "service_account",
-              "project_id": "compelling-moon-482415-s7",
-              "private_key_id": "f2ac62c40ad2a32779291fd4a9c58c4ef6a5c5b1",
-              "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDYm81Qr03Uz5no\nTTrL6iiGkHSHy7exzTpYTL1Hf4cPINcB1ijlr0dsvIR9gRMK+4vflHYE62mSzzGJ\nj5+F3jIA+jaquDOZkhRJuFs5PyPBCVqpOEQwX55UVVd2h6R4OQr9oDqJdk+fDQuH\nBcrW6ShvLiRHbHc+yf8axbyMWolaTTF7ZdWn7k9uBcDeWWsZ4fOPfNXRhF9jmjWk\nA43MYK/Pd5u31VsObkIcQG6K4q4wIM3pwxrX8Zh7jPozTmEFcyxiTnYUdAMrI92z\nVER0HYcjxzsAsMvL0Z4zS+RLPS16/MoatIALan+PB9ObfP43x03rMwp5MwqqL1Y5\nimu18WTPAgMBAAECggEAJ+jU9HfIRFyXw+hu2+Fh5CE7h0Wuq9DfXiONgF3r2Yq4\ncrstv9wCsfMuCh29D3n3dJNbB18EjaslOm4++yBMYEe5yMy1nScAG/EexbZvdQKv\nNJyMW8lSV8F9ovYtBIWmE8Lw5iDpXKm/pPoZPG2rKIj84DgI5IW9PgaOzeFki0F0\n4Ts79I9zy6gTKJbOuRClijujg5SHPEGA5vi+MMbgw9Gl2SKaXh68cl0AL+bhCwEs\n4qGAP3Rf2UxuF0htoFvW8+GAkJOg48hhY7MidyTDmi69PxqEm5H2t/ZePIElPd2G\n5Ibut98Uv9E0Xcxt/Wdg/IKjWtMQhvS7PJbH3/vh2QKBgQD5P0kCHL6V18XRED/w\nEC+Qp911/IPnIkjq8injLjcjZ6LL+3aGKKpp7D2eN8godDTPRDriA7NFCcHNy/Cx\nrKfOTsRpgN7mdG4qdgMtfbubBJNiVkAmDfFo4vhSjJnKO+ylQheOL3D9w8Lvv4ST\nys9igW/8b3Px6Vbi95TaTFJBgwKBgQDeeiTQqixjjTiQEbsb7wSyQxRChyFbLBRx\nKgYp4BhtiyoRKoqkoQ0J9wjt3ARj0LGsbxSIGZQDZakuJfi6gMTv4V5S1ZkGQNlA\nEy36RZV895Io5J6+gJ1QQvfUQR8JSn7GZTMQCD8IVi2LSDnjbBzSa3HbyET4852y\n2nTZE40pxQKBgQCB29AM8q71YOsmpoG5cKVnh54hl8OdS8aT6kGapHyDzL4L6uLw\nuQU4lKXx5fw533mYN2M6WFUxdgjsUQIBgAQZv/4jPcpkZWr0YnH7ZJO3C2ZCiM95\nRDBvxjk8wRZrQFdmLo4ZPWxwOms5AB5x5euw1eFjsynEcx8at4VtSvBcQwKBgDie\nr1XnqUpgu392876lMvXHOpW/3E5exokSX+UyYiUm4Lrjr8s8LZxWoZAfiYJ5r24q\nCvikQdYnfkn/YfDdKsG+AopkUACWanPzLaVfJi9atnjvzjK/esndcUM0m5h6vA7z\n3G39G0Wc4RRsekcV0bP/okeEDYGqRn0pOcmxPyDdAoGBAPUoM8JNEHXRp92CHBYH\n6eXX4pJwxBZuEVyqXUL69UCQ/gmS/2fKdV9zeqslXgmVplBLrTFp507VQcKmpwtl\nvmEemy6fXFnnyVnWpHkOFSkriy7THLVBq/DTVg+wXw6ZI4pph0VH//NOqPrHddzf\nG1O/aeVjHNA7cB8p8yV/KwUO\n-----END PRIVATE KEY-----\n",
-              "client_email": "github-action-deploy@compelling-moon-482415-s7.iam.gserviceaccount.com",
-              "client_id": "114262687771688461270",
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://oauth2.googleapis.com/token",
-              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/github-action-deploy%40compelling-moon-482415-s7.iam.gserviceaccount.com",
-              "universe_domain": "googleapis.com"
-            }
+          credentials_json: ${{ secrets.GCP_SA_KEY_JSON }}
 
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
