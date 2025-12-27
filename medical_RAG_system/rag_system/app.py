@@ -7,7 +7,7 @@ rag = MedRAG(retriever=1, question_type=1)
 # --- Cấu hình giao diện ---
 st.set_page_config(page_title="MedRAG Chatbot", page_icon="💬", layout="centered")
 st.title("💬 MedRAG Medical Chatbot")
-st.write("Chatbot dùng mô hình RAG để trả lời các câu hỏi y học 🧠")
+st.write("Chatbot dùng mô hình RAG để trả lời câu hỏi về các chấn thương trong thể thao. 🧠")
 
 # --- Lưu lịch sử hội thoại ---
 if "messages" not in st.session_state:

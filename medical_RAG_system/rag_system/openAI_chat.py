@@ -1,13 +1,17 @@
 import openai
 import google.generativeai as genai
 import os
+from dotenv import load_dotenv
 import json
 from typing import List, Dict
 from dotenv import dotenv_values
 
 class Chat:
     def __init__(self, question_type: int = 1, model=genai.GenerativeModel("models/gemini-2.5-flash")):
-        self.api_key = dotenv_values("medical_RAG_system/pass.env")["HF_KEY"]
+        load_dotenv("medical_RAG_system/pass.env", override=False)  # optional: nếu file tồn tại thì load
+        self.api_key = os.getenv("HF_KEY")
+        if not self.api_key:
+            raise RuntimeError("Missing HF_KEY environment variable")
         genai.configure(api_key=self.api_key)
         self.model = model
         self.context = self.set_context(question_type)
