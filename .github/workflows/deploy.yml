@@ -1,0 +1,113 @@
+name: Build & Deploy to GCE (Artifact Registry)
+
+on:
+  push:
+    branches: [ "dev" ]
+  workflow_dispatch:
+
+env:
+  # ==== GCP / Artifact Registry ====
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_REGION: ${{ secrets.GCP_REGION }}
+  AR_REPO: ${{ secrets.ARTIFACT_REPO }}
+
+  # ==== Image names in Artifact Registry ====
+  IMAGE_STREAMLIT: streamlit-app
+  IMAGE_FAISS: faiss-app
+
+  # ==== GCE VM deploy target ====
+  GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
+  GCE_ZONE: ${{ secrets.GCE_ZONE }}
+  DEPLOY_DIR: /home/thanhtuan102001/Medical_RAG
+
+jobs:
+  build_push:
+    name: Build & Push Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Cách đơn giản nhất: dùng Service Account JSON key.
+      # (Nếu bạn muốn Workload Identity Federation - "xịn" hơn, mình cũng viết được ngay.)
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY_JSON }}
+            
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker auth for Artifact Registry
+        run: |
+          gcloud auth configure-docker $GCP_REGION-docker.pkg.dev --quiet
+
+      - name: Set registry base
+        id: vars
+        run: |
+          echo "REGISTRY=$GCP_REGION-docker.pkg.dev/$GCP_PROJECT_ID/$AR_REPO" >> $GITHUB_OUTPUT
+          echo "TAG=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v3
+
+      # --- Build & push Streamlit image ---
+      - name: Build & Push Streamlit
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: medical_RAG_system/rag_system/Dockerfile.streamlit
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_STREAMLIT }}:${{ steps.vars.outputs.TAG }}
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_STREAMLIT }}:latest
+
+      # --- Build & push FAISS image ---
+      - name: Build & Push FAISS
+        uses: docker/build-push-action@v6
+        with:
+          context: medical_RAG_system/information_retrieval/faiss_container
+          file: medical_RAG_system/information_retrieval/faiss_container/Dockerfile.faiss
+          push: true
+          tags: |
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:${{ steps.vars.outputs.TAG }}
+            ${{ steps.vars.outputs.REGISTRY }}/${{ env.IMAGE_FAISS }}:latest
+
+  deploy_vm:
+    name: Deploy on GCE VM
+    runs-on: ubuntu-latest
+    needs: [ build_push ]
+
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY_JSON }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy via gcloud compute ssh
+        run: |
+          TAG=${GITHUB_SHA}
+          REGISTRY="${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.AR_REPO }}"
+
+          gcloud compute ssh "${{ env.GCE_INSTANCE }}" \
+            --zone "${{ env.GCE_ZONE }}" \
+            --command "sudo sh -lc 'set -e
+              cd \"${{ env.DEPLOY_DIR }}\"
+
+              export GCP_PROJECT_ID=\"${{ secrets.GCP_PROJECT_ID }}\"
+              export IMAGE_TAG=\"${GITHUB_SHA}\"
+              export REGISTRY=\"${REGISTRY}\"
+              
+              git config --global --add safe.directory /home/thanhtuan102001/Medical_RAG
+              git checkout dev
+              git pull origin dev
+              gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://${{ env.GCP_REGION }}-docker.pkg.dev
+
+              docker compose -f docker-compose.prod.yml pull
+              docker compose -f docker-compose.prod.yml up -d --remove-orphans
+              docker image prune -f
+            '"
