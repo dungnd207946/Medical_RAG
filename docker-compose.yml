@@ -50,3 +50,11 @@ services:
       - ES_JAVA_OPTS=-Xms1g -Xmx1g
     ports:
       - "9200:9200"
+
+  mkdocs:
+    build:
+      context: ./medical_RAG_system/docs
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./medical_RAG_system/docs:/app

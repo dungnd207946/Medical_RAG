@@ -1,13 +1,13 @@
 import json
 import time
-from openAI_chat import Chat
+from openAI_chat import Chat, config_version
 from bioBERT_retriever import BioBERTRetriever
 from bm25_retriever import BM25Retriever
 from hybrid_retriever import HybridRetriever
 # from medCPT_retriever import MedCPTRetriever
 
 class MedRAG:
-    def __init__(self, retriever=1, question_type=1, n_docs=5):
+    def __init__(self, retriever=1, question_type=1, n_docs=config_version["retrieval"]["top_k"]):
         if retriever == 1:
             self.retriever = BioBERTRetriever()
         elif retriever == 2:
