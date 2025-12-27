@@ -2,7 +2,7 @@ name: Build & Deploy to GCE (Artifact Registry)
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "tuandt" ]
   workflow_dispatch:
 
 env:
@@ -103,8 +103,8 @@ jobs:
               export REGISTRY=\"${REGISTRY}\"
               
               git config --global --add safe.directory /home/thanhtuan102001/Medical_RAG
-              git checkout dev
-              git pull origin dev
+              git checkout tuandt
+              git pull origin tuandt
               gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://${{ env.GCP_REGION }}-docker.pkg.dev
 
               docker compose -f docker-compose.prod.yml pull
