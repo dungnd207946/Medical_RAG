@@ -1,0 +1,13 @@
+streamlit
+python-dotenv
+requests
+tqdm
+
+elasticsearch==8.13.2
+
+openai
+google-generativeai
+
+transformers
+sentence-transformers
+faiss-cpu

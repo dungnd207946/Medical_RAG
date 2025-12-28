@@ -1,0 +1,15 @@
+FROM python:3.11-slim
+WORKDIR /app
+
+COPY medical_RAG_system/requirements.streamlit.txt /app/requirements.streamlit.txt
+
+RUN pip install --no-cache-dir --default-timeout=300 --retries 20 \
+    torch --index-url https://download.pytorch.org/whl/cpu \
+ && pip install --no-cache-dir --default-timeout=300 --retries 20 \
+    -r /app/requirements.streamlit.txt
+
+COPY medical_RAG_system /app/medical_RAG_system
+ENV PYTHONPATH=/app
+EXPOSE 8501
+
+CMD ["python", "-m", "streamlit", "run", "medical_RAG_system/rag_system/app.py", "--server.address=0.0.0.0", "--server.port=8501"]
