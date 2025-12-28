@@ -7,7 +7,7 @@ from hybrid_retriever import HybridRetriever
 # from medCPT_retriever import MedCPTRetriever
 
 class MedRAG:
-    def __init__(self, retriever=1, question_type=1, n_docs=config_version["retrieval"]["top_k"]):
+    def __init__(self, retriever=1, question_type=1, n_docs=config_version.get("retrieval", {}).get("top_k", 5)):
         if retriever == 1:
             self.retriever = BioBERTRetriever()
         elif retriever == 2:
